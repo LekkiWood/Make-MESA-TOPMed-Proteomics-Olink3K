@@ -229,3 +229,4 @@ if (requireNamespace("sessioninfo", quietly = TRUE)) {
   sessionInfo()
 }
 ```
+
