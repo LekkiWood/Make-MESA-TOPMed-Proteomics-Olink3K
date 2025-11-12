@@ -39,17 +39,60 @@ if (!requireNamespace("quarto", quietly = TRUE)) {
 }
 ```
 
+\newpage
+
+# Urgent Minimal Info
+
+-   You should always read the README. Tl;dr? Then, at the very least, and at at your peril:
+
+    -   Check you have the most up to versions of the data by getting the most recent version of this README file [here](https://github.com/LekkiWood/Make-MESA-TOPMed-Proteomics-Olink3K/blob/main/Make-MESA-TOPMed-Protein-Table-README.pdf), and checking filenames (these use dynamic dates).
+
+    -   Add site and site \* exam interactions as covariates, or use site and exam normalization
+
+    -   Correct for batch
+
+    -   Remember that Olink data are in log~2~ scale.
+
+# Summary
+
+```{r}
+
+#| label: output-file-names
+#| 
+#Formatted protein table filename
+Proteinfile_out_name <- targets::tar_read(long_proteintable_filename)
+
+mapping_filename <- targets::tar_read(mappingfile_filename)
+
+cleanproteintable_filename <- targets::tar_read(cleanproteinfile_filename)
+
+finalclean_N_by_exam <- targets::tar_read(Proteins_clean_N)
+```
+
+## Overview
+
 This README file describes the process for taking the raw data from the TOPMed X01 the protein assays and creating the following:
 
--   File 1:
+-   File 1: File of protein abundances in wide format for proteins, and long format for exam. This file has removed: QC samples (such as bridging samples), assays used for QC (such as extension control), and situations where a given SHARe ID/ exam combination has more than one sample ID. No other changes were made.
 
--   File 2:
+    -   In addition to the protein abundances, the following variables are included: MESA ID (variable: idno), MESA SHARe ID (variable:sidno), TOPMed Proteomics IDs (variable:SubjectID), exam (variable:Exam), Batch (for batch correction; variable: Batch).
 
--   File 3:
+    -   The current name of this file is: `{r} print(Proteinfile_out_name)`^1^
 
--   File 4:
+-   File 2: A mapping file, that maps the OlinkIDs from file 1 to the protein names; compound name used in the X01 pilot; (2) The [UniProt database](https://www.uniprot.org/) ; (3) the original assay panel; (4) The coefficient of variation; and (5) Information on whether the protein is duplicated across more than one panel.
 
--   File 5:
+    -   The current name of this file is: `{r} print(mapping_filename)`^1^
+
+-   File 3: A final table of protein abundances, with additional variables for SHARe ID, MESA ID, Exam, TOPMed ID and Batch, with proteins duplicated across more than one panel cleaned such that only the one with the lowest CV is retained. No further description of this file is provided in the README, since it should be self explanatory, however, at the request of the DCC some info on sample Ns are included here.
+
+    -   The current name of this file is: `{r} print(cleanproteintable_filename)`^1^
+    -   This file contains data on the following numbers of participants, stratified by exam:
+
+```{r}
+
+knitr::kable(finalclean_N_by_exam, format="latex")
+#print(knitr::kable(finalclean_N_by_exam))
+```
 
 ## Important notes:
 
@@ -61,11 +104,27 @@ This README file describes the process for taking the raw data from the TOPMed X
 
     -   The repository for this project can be found [here](https://github.com/LekkiWood/Make-MESA-TOPMed-Proteomics-Olink3K).
 
-    -   The most recent version of this PDF README file can be found
+    -   The most recent version of this PDF README file can be found [here](https://github.com/LekkiWood/Make-MESA-TOPMed-Proteomics-Olink3K/blob/main/Make-MESA-TOPMed-Protein-Table-README.pdf).
 
-    -   The most recent version of the source code for this README file can be found
+    -   The most recent version of the source code for this README file can be found [here](https://github.com/LekkiWood/Make-MESA-TOPMed-Proteomics-Olink3K/blob/main/Make-MESA-TOPMed-Protein-Table-README.qmd).
 
-    -   The most recent source code for creating the output files can be found
+    -   The most recent source code for creating the output files can be found [here](https://github.com/LekkiWood/Make-MESA-TOPMed-Proteomics-Olink3K/blob/main/_targets.R).
+
+-   The MESA DCC have a README file from the Gerszten lab, describing more information on the assays, and post assay processing (this file covers only the reformatting and QC-info of these data). YOU SHOULD READ THIS. The critical points are:
+
+    -   **Gerszten Lab Contacts:** Robert Gerszten: [rgerszte\@bidmc.harvard.edu](mailto:rgerszte@bidmc.harvard.edu); Laurie Farrell: [lafarrel\@bidmc.harvard.edu](mailto:lafarrel@bidmc.harvard.edu); Michael Mi: [mmi\@bidmc.harvard.edu](mailto:mmi@bidmc.harvard.edu); Shuliang Deng: [sdeng1\@bidmc.harvard.edu](mailto:sdeng1@bidmc.harvard.edu)
+
+    -   Internal QC was conducted in which a limited number of datapoints failed due to automatic flags. Please use caution when interpreting any warned assays (see mapping file), which do not necessarily have to be excluded from analyses. Across Plates 81 to 102, 10 samples failed QC, which were re-run on Plate 103. Some Plates had systematic failures. Plates 41-44 were excluded from dataset due to duplication error in the data generation process. The lab are currently in discussion with Olink to rerun these samples, which may be released in a future freeze. Plates 77-80 wxcluded from dataset due to poor data quality.
+
+    -   Data are normalized and post-processed. Olink’s normalization software generated protein quantification data (Normalized Protein eXpression \[NPX\] values) based on next generation sequencing counts, which is the raw quantification. Intensity normalization was used which subtracts the median NPX values of Samples across all Plates in a project (this was done on a per Batch basis in MESA) on a per assay basis. After internal QC and analyses, Intensity normalization is the recommended format to use and shared here except for bimodally distributed proteins.
+
+    -   In extended QC and analyses, we discovered that there is systematic bias in the global proteomic data based on MESA study site that varied differently based on the Exam (i.e., different sites are outliers at different Exams in comparison to other sites). The lab recommend adding Site and Site by Exam interaction covariates in analyses or using site and exam specific median normalization can be performed as well.
+
+    -   In addition, a Batch effect was also detected with Batch 4, which was a supplementary run that mainly included samples collected at Exam 6. Bridging samples were included in Batch 4 for investigators who wish to perform bridging normalization. The lab found that the inclusion of Batch as a covariate is sufficient as a simpler adjustment.
+
+## Unresolved issues
+
+-   Table hyperlinks are still not rendering in Quarto and no one can fix it. It seems to be a Linux issue since this is not a problem on my mac; however, the Linux HPC is preferred for reproducibility.
 
 \newpage
 
@@ -74,6 +133,7 @@ This README file describes the process for taking the raw data from the TOPMed X
 ```{r}
 
 #| label: load-filename-info
+
 
 QC_info <- targets::tar_read(build_proteins_QC)
 ```
@@ -98,6 +158,74 @@ QC_info <- targets::tar_read(build_proteins_QC)
 
 ## Raw file info
 
--   The raw protein abundance file contained information on N=`{r} print(QC_info$raw_inputs$raw_protein_N_all)` protein assays (including those included for QC).
+-   The raw protein abundance file contained information on N=`{r} print(QC_info$raw_inputs$raw_protein_N_all)` protein assays, including those used for QC.
 
 -   When removing assays for QC, the raw protein abundance file contained information on N=`{r} print(QC_info$raw_inputs$raw_protein_N_proteins[1,1])` proteins.
+
+-   The protein abundance file contained information on N=``` {r}``print(QC_info$raw_inputs$raw_N_all) ``` sample IDs (i.e., unique participant/exam combinations), including bridging samples.
+
+-   After removing QC samples (including bridging, controls, and one duplicate) the protein abundance file contained information on N=`{r} print(QC_info$raw_inputs$raw_N_nobridge)`sample IDs (i.e., unique participant/exam combinations).
+
+### Formatting
+
+-   Bridging (and other QC) samples were removed.
+
+-   Protein assays used for QC were removed.
+
+-   Proteins that should be excluded due to QC warnings (variable "QC_warning" set to "EXCLUDED") were removed, even though these do not have NPX values.
+
+-   Data were put into wide format, with "SampleID" as the unique ID, "OlinkID" forming the variable names (protein identifiers), and values taken from the "NPX" column.
+
+    -   In wide format, the file contained information on N=``` {r}``print(QC_info$formatted_protein_file_info$unique_sampleids) ``` unique sample IDs.
+
+    -   In wide format, the file contained information on N=`{r} print(QC_info$formatted_protein_file_info$duplicated_sampleids)` duplicated sample IDs. ^2^
+
+-   SHARe IDs, and subsequently MESA IDs, were merged into the file with exam information.
+
+-   At this point, the range of unique SHARe ID by exam combinations was N=`{r} range(QC_info$initial_dupes$Freq)[1]` - `{r} range(QC_info$initial_dupes$Freq)[2]`. This indicates no samples ID were duplicated in the assays.
+
+## Final file info
+
+-   The final file contained information on N=`{r} print(QC_info$formatted_protein_file_info$protein_N)` proteins, measured across ``` {r}``print(QC_info$formatted_protein_file_info$sample_N) ``` sample IDs.
+
+-   This filewas saved as: `{r} print(Proteinfile_out_name)`^1^
+
+\newpage
+
+# File 2: Mapping File (with QC info)
+
+-   The formatted protein file (file 1 above) was used to calculate the coefficient of variation (CV) using the formula: CV = sqrt(2`^`(sigma`^`2)-1).
+
+-   The protein data do not have missing data, so information on missingness is not included.
+
+-   A variable called "Retain" was created to indicate whether each protein was (1) unique (i.e., included on only one panel); (2) duplicated, and across all panels had the lowest CV; or (3) duplicated, and across all panels did not have the lowest CV.
+
+-   This information was saved with the following filename: `{r} print(mapping_filename)`^1^
+
+# 
+
+\newpage
+
+# Notes
+
+## Footnotes
+
+^1^Dates are dynamic
+
+^2^Missing, or "NULL", or zero values here arise from using a standard script for all QC to flag potential issues. Missing, "NULL", or zero values typically indicate a lack of potentially concerning issue.
+
+## Session info
+
+The exact session information used for this analysis
+
+```{r}
+
+#| label: session-info
+
+# Prefer the detailed sessioninfo output; otherwise fall back to base.
+if (requireNamespace("sessioninfo", quietly = TRUE)) {
+  sessioninfo::session_info()
+} else {
+  sessionInfo()
+}
+```
