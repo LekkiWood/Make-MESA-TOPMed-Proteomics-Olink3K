@@ -1,0 +1,103 @@
+---
+title: "Make-MESA-TOPMed-Protein-Table-README"
+author: "LekkiWood (LekkiWood@Gmail.com)"
+date: today
+format:
+  pdf:
+    toc: true
+    toc-depth: 3
+crossref:
+  tbl-prefix: "Table"
+  fig-prefix: "Figure"
+execute:
+  echo: false
+  warning: false
+  message: false
+  # ensure chunks run from the project root (where _targets/ lives)
+  dir: project
+pdf-engine: latexmk
+editor: visual
+---
+
+```{r}
+#| label: load-packages
+
+
+## Load targets
+if (!requireNamespace("targets", quietly = TRUE)) {
+  stop("The {targets} package is not installed/available in this render session.")
+}
+
+## Load knitr
+if (!requireNamespace("knitr", quietly = TRUE)) {
+  stop("The {knitr} package is not installed/available in this render session.")
+}
+
+## Load quarto
+if (!requireNamespace("quarto", quietly = TRUE)) {
+  stop("The {quarto} package is not installed/available in this render session.")
+}
+```
+
+This README file describes the process for taking the raw data from the TOPMed X01 the protein assays and creating the following:
+
+-   File 1:
+
+-   File 2:
+
+-   File 3:
+
+-   File 4:
+
+-   File 5:
+
+## Important notes:
+
+-   You should always check you have the most recent files! I use dynamic dates, so this can be done by checking that your files match the versions on Github:
+
+    -   My profile can be found [here](https://github.com/LekkiWood).
+
+    -   My repositories are listed [here](https://github.com/LekkiWood?tab=repositories).
+
+    -   The repository for this project can be found [here](https://github.com/LekkiWood/Make-MESA-TOPMed-Proteomics-Olink3K).
+
+    -   The most recent version of this PDF README file can be found
+
+    -   The most recent version of the source code for this README file can be found
+
+    -   The most recent source code for creating the output files can be found
+
+\newpage
+
+# File 1: Formatted Protein Assay Table
+
+```{r}
+
+#| label: load-filename-info
+
+QC_info <- targets::tar_read(build_proteins_QC)
+```
+
+## Input file names
+
+### Raw metabolite tables
+
+-   A table of metabolite abundances from the amide assay: `{r} print(unlist(strsplit(QC_info$filenames$raw_proteins_file_name, split="/"))[8])`
+
+### Info files
+
+-   Sample information to link TOPMed IDs to unique MESA SHARe ID and exam combinations: `{r} print(unlist(strsplit(QC_info$filenames$raw_protein_info_file_name, split="/"))[8])`
+
+### Protein keys
+
+-   Keys to link Olink IDs to names compounds: `{r} print(unlist(strsplit(QC_info$filenames$ raw_protein_keys_file_name, split="/"))[8])`
+
+### Bridging file
+
+-   A file to bridge SHARe ids (sidno) with MESA IDs (idno) `{r} print(unlist(strsplit(QC_info$filenames$raw_bridgingfile_file_name, split="/"))[7])`
+
+## Raw file info
+
+-   The raw protein abundance file contained information on N=`{r} print(QC_info$raw_inputs$raw_protein_N_all)` protein assays (including those included for QC).
+
+-   When removing assays for QC, the raw protein abundance file contained information on N=`{r} print(QC_info$raw_inputs$raw_protein_N_proteins[1,1])` proteins.
