@@ -1,0 +1,41 @@
+build_protein_table_function <- function(path_proteins, path_protein_info, path_bridge)
+  
+{
+  
+  #----------------------------------------------------------#
+  #---------------Read in files -----------------------------#
+  #----------------------------------------------------------#
+  
+  #Intensity table
+  proteins_raw <- data.table::fread(path_proteins)
+  
+  #Info table
+  protein_info <- read.table(path_protein_info)
+  
+    #Bridging file
+  bridge <- data.table::fread(path_bridge) |>
+    dplyr::select(`SHARE ID Number`, `MESA Participant ID`) |>
+    dplyr::rename(sidno = `SHARE ID Number`, idno = `MESA Participant ID`)
+    
+  #------------------------------------------------------------#
+  #---------------Info for README -----------------------------#
+  #------------------------------------------------------------#
+  
+    QC_info <- list(
+    filenames = list(raw_proteins_file_name = path_proteins,
+                     raw_protein_info_file_name = path_protein_info,
+                     raw_bridgingfile_file_name = path_bridge
+                     
+    ),
+  
+  #----------------Outputs -----------------------------#
+  
+  list(
+    
+    QC_info_out = QC_info
+    
+    )
+    
+  )
+  
+  }
