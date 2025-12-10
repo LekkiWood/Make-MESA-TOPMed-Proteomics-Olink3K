@@ -162,7 +162,7 @@ QC_info <- targets::tar_read(build_proteins_QC)
 
 -   When removing assays for QC, the raw protein abundance file contained information on N=`{r} print(QC_info$raw_inputs$raw_protein_N_proteins[1,1])` proteins.
 
--   The protein abundance file contained information on N=``` {r}``print(QC_info$raw_inputs$raw_N_all) ``` sample IDs (i.e., unique participant/exam combinations), including bridging samples.
+-   The protein abundance file contained information on N=``{r}print(QC_info$raw_inputs$raw_N_all)` sample IDs (i.e., unique participant/exam combinations), including bridging samples.
 
 -   After removing QC samples (including bridging, controls, and one duplicate) the protein abundance file contained information on N=`{r} print(QC_info$raw_inputs$raw_N_nobridge)`sample IDs (i.e., unique participant/exam combinations).
 
@@ -176,7 +176,7 @@ QC_info <- targets::tar_read(build_proteins_QC)
 
 -   Data were put into wide format, with "SampleID" as the unique ID, "OlinkID" forming the variable names (protein identifiers), and values taken from the "NPX" column.
 
-    -   In wide format, the file contained information on N=``` {r}``print(QC_info$formatted_protein_file_info$unique_sampleids) ``` unique sample IDs.
+    -   In wide format, the file contained information on N=`{r}print(QC_info$formatted_protein_file_info$unique_sampleids)` unique sample IDs.
 
     -   In wide format, the file contained information on N=`{r} print(QC_info$formatted_protein_file_info$duplicated_sampleids)` duplicated sample IDs. ^2^
 
@@ -186,9 +186,9 @@ QC_info <- targets::tar_read(build_proteins_QC)
 
 ## Final file info
 
--   The final file contained information on N=`{r} print(QC_info$formatted_protein_file_info$protein_N)` proteins, measured across ``` {r}``print(QC_info$formatted_protein_file_info$sample_N) ``` sample IDs.
+-   The final file contained information on N=`{r} print(QC_info$formatted_protein_file_info$protein_N)` proteins, measured across ``{r}print(QC_info$formatted_protein_file_info$sample_N)` sample IDs.
 
--   This filewas saved as: `{r} print(Proteinfile_out_name)`^1^
+-   This file was saved as: `{r} print(Proteinfile_out_name)`^1^
 
 \newpage
 
@@ -229,5 +229,3 @@ if (requireNamespace("sessioninfo", quietly = TRUE)) {
   sessionInfo()
 }
 ```
-
-
