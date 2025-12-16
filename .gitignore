@@ -4,6 +4,6 @@
 .Ruserdata
 outputs/*.csv
 
-Make-MESA-TOPMed-Protein-Table-README.fdb_latexmk
+*.fdb_latexmk
 
- _targets/
+ _targets/*
