@@ -15,7 +15,7 @@ execute:
   message: false
   # ensure chunks run from the project root (where _targets/ lives)
   dir: project
-pdf-engine: latexmk
+pdf-engine: lualatex
 editor: visual
 ---
 
@@ -90,7 +90,11 @@ This README file describes the process for taking the raw data from the TOPMed X
 
 ```{r}
 
-knitr::kable(finalclean_N_by_exam, format="latex")
+gt_table <- finalclean_N_by_exam |>
+  gt::gt()
+
+#print(gt_table)
+#rm(gt_table)
 #print(knitr::kable(finalclean_N_by_exam))
 ```
 
@@ -186,7 +190,7 @@ QC_info <- targets::tar_read(build_proteins_QC)
 
 ## Final file info
 
--   The final file contained information on N=`{r} print(QC_info$formatted_protein_file_info$protein_N)` proteins, measured across \``{r}print(QC_info$formatted_protein_file_info$sample_N)` sample IDs.
+-   The final file contained information on N=`{r} print(QC_info$formatted_protein_file_info$protein_N)` proteins, measured across `{r} print(QC_info$formatted_protein_file_info$sample_N)` sample IDs.
 
 -   This file was saved as: `{r} print(Proteinfile_out_name)`^1^
 
@@ -194,7 +198,7 @@ QC_info <- targets::tar_read(build_proteins_QC)
 
 # File 2: Mapping File (with QC info)
 
--   The formatted protein file (file 1 above) was used to calculate the coefficient of variation (CV) using the formula: CV = sqrt(2`^`(sigma`^`2)-1).
+-   The formatted protein file (file 1 above) was used to calculate the coefficient of variation (CV) using the formula: CV = sqrt(2 $\sigma$ ^2^ -1).
 
 -   The protein data do not have missing data, so information on missingness is not included.
 
@@ -210,9 +214,9 @@ QC_info <- targets::tar_read(build_proteins_QC)
 
 ## Footnotes
 
-^1^Dates are dynamic
+^1^ Dates are dynamic
 
-^2^Missing, or "NULL", or zero values here arise from using a standard script for all QC to flag potential issues. Missing, "NULL", or zero values typically indicate a lack of potentially concerning issue.
+^2^ Missing, or "NULL", or zero values here arise from using a standard script for all QC to flag potential issues. Missing, "NULL", or zero values typically indicate a lack of potentially concerning issue.
 
 ## Session info
 

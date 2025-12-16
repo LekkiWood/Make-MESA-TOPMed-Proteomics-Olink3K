@@ -11,7 +11,7 @@ Sys.setenv(VROOM_CONNECTION_SIZE = as.character(10 * 1024 * 1024)) #For any larg
 
 
 tar_option_set(packages = c("dplyr", "tidyr", "tibble", "readr", "data.table", "bit64", 
-                            "foreign", "quarto", "rlang", "purrr", "rcompanion", "knitr"))
+                            "foreign", "quarto", "rlang", "purrr", "rcompanion", "knitr", "gtsummary", "gt"))
 
 tar_source("/media/Analyses/Make-MESA-TOPMed-Proteomics-Olink3K/R")
 
