@@ -56,9 +56,9 @@ if (!requireNamespace("quarto", quietly = TRUE)) {
 # Summary
 
 ```{r}
-
 #| label: output-file-names
-#| 
+
+
 #Formatted protein table filename
 Proteinfile_out_name <- targets::tar_read(long_proteintable_filename)
 
@@ -86,14 +86,16 @@ This README file describes the process for taking the raw data from the TOPMed X
 -   File 3: A final table of protein abundances, with additional variables for SHARe ID, MESA ID, Exam, TOPMed ID and Batch, with proteins duplicated across more than one panel cleaned such that only the one with the lowest CV is retained. No further description of this file is provided in the README, since it should be self explanatory, however, at the request of the DCC some info on sample Ns are included here.
 
     -   The current name of this file is: `{r} print(cleanproteintable_filename)`^1^
-    -   This file contains data on the following numbers of participants, stratified by exam:
+    -   The numbers of participants, stratified by exam, is available in @tbl-final-N-by-Exam:
 
 ```{r}
+#| label: tbl-final-N-by-Exam
+#| tbl-cap: Final N by exam
 
 gt_table <- finalclean_N_by_exam |>
   gt::gt()
 
-#print(gt_table)
+gt_table
 #rm(gt_table)
 #print(knitr::kable(finalclean_N_by_exam))
 ```
@@ -128,14 +130,15 @@ gt_table <- finalclean_N_by_exam |>
 
 ## Unresolved issues
 
--   Table hyperlinks are still not rendering in Quarto and no one can fix it. It seems to be a Linux issue since this is not a problem on my mac; however, the Linux HPC is preferred for reproducibility.
+## Resolved issues
+
+-   Table hyperlinks are still not rendering in Quarto and no one can fix it. It seems to be a Linux issue since this is not a problem on my mac; however, the Linux HPC is preferred for reproducibility (resolved on `{r} print(Sys.Date())`).
 
 \newpage
 
 # File 1: Formatted Protein Assay Table
 
 ```{r}
-
 #| label: load-filename-info
 
 
@@ -223,7 +226,6 @@ QC_info <- targets::tar_read(build_proteins_QC)
 The exact session information used for this analysis
 
 ```{r}
-
 #| label: session-info
 
 # Prefer the detailed sessioninfo output; otherwise fall back to base.
